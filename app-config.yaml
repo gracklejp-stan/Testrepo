@@ -63,7 +63,7 @@ catalog:
       rules:
         - allow: [User, Group]
 
-kubernetes: {}
+# kubernetes: {}
 
 permission:
   enabled: true
