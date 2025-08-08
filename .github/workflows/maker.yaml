@@ -223,7 +223,7 @@ jobs:
        cd testback/packages/app/src
        sudo mkdir themes
        cd themes
-       sudo touch index.ts
+       # sudo touch index.ts
        cd ..
        cd ..
        cd ..
@@ -232,7 +232,7 @@ jobs:
        echo " "
        pwd
        ls -la
-       sudo cp Custom/theme.ts testback/packages/app/src/themes/index.ts
+       # sudo cp Custom/theme.ts testback/packages/app/src/themes/index.ts
        sudo cp Custom/Root.tsx testback/packages/app/src/components/Root/Root.tsx
 
 
