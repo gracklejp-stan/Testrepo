@@ -68,6 +68,3 @@ kubernetes: {}
 permission:
   enabled: true
 
-# 🔍 Lunr search engine config added here
-search:
-  engine: lunr
