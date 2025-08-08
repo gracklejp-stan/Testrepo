@@ -25,10 +25,11 @@ integrations:
       token: ${GITHUB_TOKEN}
 
 proxy:
-  '/search':
-    target: http://localhost:7007
-    pathRewrite:
-      '^/search': '/api/search'
+  endpoints:
+    '/search':
+      target: 'http://localhost:7007'
+      pathRewrite:
+        '^/search': '/api/search'
 
 techdocs:
   builder: 'local'
