@@ -1,0 +1,293 @@
+name: 2 Deploy Backstage with new home
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sysinfo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt full-upgrade -y
+        sudo apt-get install -y neofetch nodejs npm unzip expect jq
+        echo "#### Updated System ####"
+
+    - name: Run Neofetch
+      run: neofetch
+
+    - name: Show Disk Usage
+      run: |
+        echo "Disk usage for all mounted filesystems:"
+        df -h
+        echo "#### Disk Details ####"
+
+    - name: Install Backstage
+      run: |
+        echo "#### Create Backstage ####"
+        sudo echo "testback" | sudo npx @backstage/create-app@latest
+        echo "#### Assign Permissions ####"
+        sudo chmod 777 testback
+        ls -la
+        cd testback
+        echo " "
+        echo "#### Backstage Created ####"
+        echo " "
+        echo "#### Base Directory ####"
+        echo " "
+        ls -la
+        echo " "
+        find . -type f -name "index.html"
+        echo "#### List of Indexs ####"
+        
+
+    - name: Install Ngrok
+      run: |
+       sudo curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \ | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+       echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \ | sudo tee /etc/apt/sources.list.d/ngrok.list
+       sudo apt update
+       sudo apt install -y ngrok
+        echo "#### new method install ####"
+        echo " "
+
+        # sudo apt update
+        # sudo apt install snapd -y
+        # sudo snap install ngrok
+
+        echo " "
+        echo "#### nGrok Installed ####"
+
+    - name: Create the files
+      run: |
+        echo "#### File manipulation ####"
+        sudo chmod 777 add-dev-script.sh
+        cd testback
+        sudo mkdir -p packages/app/src/components/home
+        cd ..
+        # sudo cp home.tsx testback/packages/app/src/components/home/HomePage.tsx
+        echo "#### Applied home page ####"
+        echo " "
+        cd testback
+        echo " "
+        echo "#### App Config YAML ####"
+        echo " "
+        cat app-config.yaml
+        echo " "
+        echo "#### Local Config YAML ####"
+        echo " "
+        cat app-config.local.yaml
+        echo " "
+        echo "#### App Config Production YAML ####"
+        echo " "
+        cat app-config.production.yaml
+        echo " "
+        echo "#### Packages ####"
+        echo " "
+        ls packages
+        echo " "
+        echo "#### Packages / App ####"
+        echo " "
+        ls -la packages/app
+        echo " "
+        echo "#### Packages / App / Public ####"
+        echo " "
+        ls -la packages/app/public
+        echo " "
+        echo "#### Default Home Page ####"
+        echo " "
+        cat packages/app/public/index.html
+        echo " "
+        echo "#### Default App tsx ####"
+        echo " "
+        echo " "
+        ls -la packages/app/src
+        echo " "
+        cat packages/app/src/App.tsx
+        echo " "
+        echo "#### Looking for Home ####"
+        echo " "
+        ls -la packages/app/src/components/home
+        echo " "
+        echo "##### Auth Time #####"
+        cd ..
+        sudo cp app-config.yaml testback/app-config.yaml
+        cd testback
+        echo " "
+        echo "#### Dump App.tsx ####"
+        echo " "
+        cd ..
+        cd testback
+        cat packages/app/src/App.tsx
+        echo " "
+        echo "#### Dump Index ####"
+        echo " "
+        cat packages/backend/src/index.ts
+        echo " "
+        cd ..
+        # sudo cp backend.ts testback/packages/backend/src/index.ts
+        cd testback
+        echo "##### End Auth ######"
+        cd ..
+        sudo cp -r cata testback/cata
+
+    - name: Add ngrok auth token
+      env:
+       NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+      run: ngrok config add-authtoken "$NGROK_AUTH_TOKEN"
+
+    - name: Start Backstage and Ngrok
+      run: |
+        sudo chmod 777 testback
+        cd testback
+        echo "#### Installing dependencies ####"
+        echo " "
+        sudo yarn install
+        sudo yarn add react@18 react-dom@18 @types/react
+        # sudo yarn add --dev typescript
+        cd packages
+        cd app
+        echo "in app"
+        sudo yarn add @backstage/plugin-home
+        echo "backing up"
+        cd ..
+        cd ..
+        pwd
+        echo " "
+        echo "#### Starting Backstage in background ####"
+        echo " "
+        sudo nohup yarn start > backstage.log 2>&1 &
+        echo "#### Waiting for Backstage to boot on port 3000... ####"
+        for i in {1..60}; do
+         if curl -s http://localhost:3000 > /dev/null; then
+          echo "Backstage is up!"
+          break
+          fi
+         echo "Still waiting... ($i)"
+         sleep 5
+        done
+         echo "#### Dumping Backstage log for confirmation ####"
+         echo " "
+         cat backstage.log
+         echo " "
+         echo "#### Starting ngrok... ####"
+         echo " "
+         # ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}  
+         nohup ngrok http 3000 --host-header=localhost > ngrok.log 2>&1 &
+         echo "Sleeping 10s to allow Ngrok tunnel to initialize..."
+         sleep 10
+         echo "#### Dumping app-config.yaml ####"
+         echo " "
+         sudo cat app-config.yaml
+         echo " "
+         echo "#### Dumping Ngrok log ####"
+         echo " "
+         cat ngrok.log
+         echo " "
+         echo "#### Startup Completed ####"
+
+
+    - name: home page stuff dl and unpack
+      run: |
+       echo "#### Create Homepage App ####"
+       pwd
+       ls -la
+       cd testback
+       sudo yarn install
+       echo "homescreenapp" | sudo yarn new --select plugin
+       echo " "
+       pwd
+       ls -la
+       cd ..
+       echo "#### Add Mods ####"
+       sudo cp app.tsx testback/packages/app/src/App.tsx
+       sudo cp Custom/ExampleComponent.tsx testback/plugins/homescreenapp/src/components/ExampleComponent/ExampleComponent.tsx
+       cd testback
+       sudo yarn add @material-ui/core@4
+       cd ..
+
+
+    - name: Overwrite pictures and themework
+      run: |
+       echo " "
+       pwd
+       ls -la
+       sudo cp Custom/logo.tsx testback/packages/app/src/components/Root/LogoFull.tsx
+       cd testback/packages/app/src
+       sudo mkdir themes
+       cd themes
+       sudo touch index.ts
+       cd ..
+       cd ..
+       cd ..
+       cd ..
+       cd ..
+       echo " "
+       pwd
+       ls -la
+       sudo cp Custom/theme.ts testback/packages/app/src/themes/index.ts
+       sudo cp Custom/Root.tsx testback/packages/app/src/components/Root/Root.tsx
+
+
+    - name: Build Backend
+      run: |
+       cd testback/packages/backend
+       #sudo yarn tsc
+       cd ..
+       cd ..
+       cd ..
+       
+    - name: Restart Backstage and Ngrok
+      run: |
+        echo "#### Stopping Backstage and Ngrok ####"
+        pkill -f "yarn start" || echo "Backstage not running"
+        pkill -f "ngrok" || echo "Ngrok not running"
+        sleep 5
+        echo "#### Restarting Backstage ####"
+        cd testback
+        sudo nohup yarn start > backstage.log 2>&1 &
+        echo "Waiting for Backstage to restart..."
+        for i in {1..60}; do
+         if curl -s http://localhost:3000 > /dev/null; then
+          echo "Backstage is back up!"
+          break
+         fi
+         echo "Still waiting... ($i)"
+         sleep 5
+        done
+        echo "#### Restarting Ngrok ####"
+        nohup ngrok http 3000 --host-header=localhost > ngrok.log 2>&1 &
+        echo "Sleeping 10s to allow Ngrok tunnel to reinitialize..."
+        sleep 10
+        echo "#### Ngrok and Backstage restarted ####"
+        echo " "
+        echo "Backstage log:"
+        tail -n 20 backstage.log
+        echo " "
+        echo "Ngrok log:"
+        tail -n 20 ngrok.log
+    
+
+
+
+
+
+
+
+
+
+
+    - name: Heartbeat and Keep Runner Alive
+      run: |
+        curl -v localhost:3000
+        ls -la
+        echo "End Test"
+        echo "Keeping the runner alive for 5 hours..."
+        sleep 18000
