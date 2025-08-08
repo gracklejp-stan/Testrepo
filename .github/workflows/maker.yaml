@@ -279,6 +279,7 @@ jobs:
         echo " "
         echo "Ngrok log:"
         tail -n 20 ngrok.log
+        curl -i http://localhost:3000/search/query?term=test
     
 
 
