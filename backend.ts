@@ -37,9 +37,6 @@ backend.add(
 // Search plugins
 backend.add(import('@backstage/plugin-search-backend'));
 
-// ✅ Use Lunr search engine for local development
-backend.add(import('@backstage/plugin-search-backend-module-lunr'));
-
 // Search collators
 backend.add(import('@backstage/plugin-search-backend-module-catalog'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
