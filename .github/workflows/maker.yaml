@@ -253,8 +253,8 @@ jobs:
     - name: Restart Backstage and Ngrok
       run: |
         echo "#### Stopping Backstage and Ngrok ####"
-        pkill -f "yarn start" || echo "Backstage not running"
-        pkill -f "ngrok" || echo "Ngrok not running"
+        sudo pkill -f "yarn start" || echo "Backstage not running"
+        sudo pkill -f "ngrok" || echo "Ngrok not running"
         sleep 5
         echo "#### Restarting Backstage ####"
         cd testback
