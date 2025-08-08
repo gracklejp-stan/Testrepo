@@ -132,7 +132,7 @@ jobs:
         cat packages/backend/src/index.ts
         echo " "
         cd ..
-        # sudo cp backend.ts testback/packages/backend/src/index.ts
+        sudo cp backend.ts testback/packages/backend/src/index.ts
         cd testback
         echo "##### End Auth ######"
         cd ..
