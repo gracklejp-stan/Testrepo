@@ -211,7 +211,9 @@ jobs:
        sudo cp Custom/ExampleComponent.tsx testback/plugins/homescreenapp/src/components/ExampleComponent/ExampleComponent.tsx
        cd testback
        cd packages/backend
-       yarn add @backstage/plugin-search-backend-module-lunr
+       sudo yarn add \
+       @backstage/plugin-search-backend \
+       @backstage/plugin-search-backend-node
        cd ..
        cd ..
        sudo yarn add @material-ui/core@4
