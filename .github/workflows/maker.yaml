@@ -151,7 +151,7 @@ jobs:
         echo " "
         sudo yarn install
         sudo yarn add react@18 react-dom@18 @types/react
-        # sudo yarn add --dev typescript
+        sudo yarn add --dev typescript
         cd packages
         cd app
         echo "in app"
