@@ -54,6 +54,10 @@ jobs:
         ls
         npm install
         npm start
+        nohup npm start > server.log 2>&1 &
+        echo "Server started in background. Logs:"
+        sleep 5
+        tail -n 20 server.log
 
     - name: Start Ngrok
       run: |
