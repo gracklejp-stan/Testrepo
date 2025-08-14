@@ -68,3 +68,11 @@ jobs:
          cat ngrok.log
          echo " "
          echo "#### Startup Completed ####"
+
+    - name: Heartbeat and Keep Runner Alive
+      run: |
+        curl -v localhost:3000
+        ls -la
+        echo "End Test"
+        echo "Keeping the runner alive for 5 hours..."
+        sleep 18000
