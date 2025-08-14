@@ -50,7 +50,7 @@ jobs:
       run: |
         git clone https://github.com/redhat-developer/red-hat-developer-hub-customization-provider.git
         ls
-        cd red-hat-developer-hub-vustomization-provider
+        cd red-hat-developer-hub-customization-provider
         ls
         npm install
         npm start
