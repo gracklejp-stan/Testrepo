@@ -60,6 +60,7 @@ jobs:
 
     - name: Start Ngrok
       run: |
+         cd red-hat-developer-hub-customization-provider
          echo "#### Starting ngrok... ####"
          echo " "
          # ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}  
