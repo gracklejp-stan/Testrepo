@@ -60,7 +60,7 @@ jobs:
          echo "#### Starting ngrok... ####"
          echo " "
          # ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}  
-         nohup ngrok http 3000 --host-header=localhost > ngrok.log 2>&1 &
+         nohup ngrok http 8080 --host-header=localhost > ngrok.log 2>&1 &
          echo "Sleeping 10s to allow Ngrok tunnel to initialize..."
          sleep 10
          echo "#### Dumping Ngrok log ####"
@@ -71,7 +71,7 @@ jobs:
 
     - name: Heartbeat and Keep Runner Alive
       run: |
-        curl -v localhost:3000
+        curl -v localhost:8080
         ls -la
         echo "End Test"
         echo "Keeping the runner alive for 5 hours..."
