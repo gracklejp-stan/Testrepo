@@ -1,0 +1,35 @@
+name: Customizer
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sysinfo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt full-upgrade -y
+        sudo apt-get install -y neofetch nodejs npm unzip expect jq
+        echo "#### Updated System ####"
+
+    - name: Run Neofetch
+      run: neofetch
+    
+
+    - name: Install Server
+      run: |
+        git clone https://github.com/redhat-developer/red-hat-developer-hub-customization-provider.git
+        ls
+        cd red-hat-developer-hub-vustomization-provider
+        ls
+        npm install
+        npm start
