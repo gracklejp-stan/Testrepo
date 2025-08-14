@@ -53,7 +53,6 @@ jobs:
         cd red-hat-developer-hub-customization-provider
         ls
         npm install
-        npm start
         nohup npm start > server.log 2>&1 &
         echo "Server started in background. Logs:"
         sleep 5
