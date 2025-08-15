@@ -288,6 +288,7 @@ jobs:
       run: |
         cd testback/plugins/homescreenapp
         sudo yarn build
+        sudo yarn install
         cd ..
         cd ..
         cd ..
