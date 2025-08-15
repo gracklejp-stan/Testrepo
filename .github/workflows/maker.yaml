@@ -288,8 +288,22 @@ jobs:
       run: |
         cd testback/plugins/homescreenapp
         sudo yarn build
+        cd ..
+        cd ..
+        cd ..
         
 
+    - name: Commit entire working directory into /generated
+      run: |
+        echo "#### Preparing to commit generated files ####"
+        mkdir -p generated/${GITHUB_RUN_ID}
+        sudo rsync -a ./* generated/${GITHUB_RUN_ID}/ --exclude .git --exclude generated
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git pull
+        git add generated/${GITHUB_RUN_ID}
+        git commit -m "Add entire working directory to generated/${GITHUB_RUN_ID}" || echo "No changes to commit"
+        git push
 
 
 
