@@ -284,6 +284,11 @@ jobs:
 
 
 
+    - name: Export home plugin
+      run: |
+        cd testback/plugins/homescreenapp
+        sudo yarn build
+        
 
 
 
